@@ -11,8 +11,8 @@ export default function PublicHeader() {
     <div>
         <header className="border-b bg-blue-200">
             <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-                Dogital drivers ワンちゃんとの快適な移動のために
-               
+                Dogital drivers
+                               
                 <div className="flex items-center gap-4">
                     <Input 
                         placeholder="アプリ内を検索"
