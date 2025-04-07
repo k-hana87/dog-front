@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 export default function Postspage() {
   return (
@@ -6,6 +8,11 @@ export default function Postspage() {
       <p className="text-lg text-gray-600 mb-2">
         ワンちゃんとの快適な移動のために
       </p>
+      <Avatar className="w-15 h-15">
+        <AvatarImage src="/images/dog.jpg" />
+        <AvatarFallback>dog-name</AvatarFallback>
+      </Avatar>
+
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8">
         Dogital Drivers
       </h1>

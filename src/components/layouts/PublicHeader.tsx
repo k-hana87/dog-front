@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import test from "node:test"
   
 
 
@@ -12,7 +11,7 @@ export default function PublicHeader() {
         <header className="border-b bg-blue-200">
             <div className="container mx-auto px-4 py-4 flex items-center justify-between">
                 Dogital drivers
-                               
+
                 <div className="flex items-center gap-4">
                     <Input 
                         placeholder="アプリ内を検索"

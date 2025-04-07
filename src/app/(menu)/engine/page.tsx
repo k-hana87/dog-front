@@ -1,18 +1,68 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function Odekakepage() {
+
+
+export default function enginepage() {
     return (
-      <div className="text-2xl">
-        <h1>トレーニングモードのエンジン音</h1>
-        <p>エンジン音のページです</p>
+      <div className="flex flex-col items-center py-10 px-4">
 
-        <Link href="/">
-            <Button className="bg-green-300 text-black cursor-pointer hover:bg-green-400">
-                ←　戻る
-            </Button>
-        </Link>
+        <div className="flex items-center gap-4">
+          <h1 className="sm:text-4xl md:text-5xl font-bold mb-20">
+            Dogital Drivers
+          </h1>          
+          <Avatar className="w-15 h-15">
+            <AvatarImage src="images/dog.jpg" />
+            <AvatarFallback>dog-name</AvatarFallback>
+          </Avatar>
+          <p className="text-lg text-gray-600 mb-2">
+           ワンちゃんとの快適な移動のために
+          </p>      
+        </div>
+
+        <div className="w-full max-w-sm mb-2">
+          <div className="bg-gray-200 p-6 rounded-full mb-2">
+                <h2 className="text-xl font-bold mb-2">エンジン音</h2>
+          </div>
+        </div>
+
+        <div className="w-full max-w-sm bg-blue-100 p-6 rounded-xl mb-8">          
+    
+          <h2 className="text-xl font-bold mb-8">車の音に慣れよう</h2>
+          
+          <div className="flex flex-col items-center gap-5">
+            <Link href="/music">
+            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+              エンジン音-その１
+            </button>
+            </Link>
+            <Link href="/engine">
+            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+              エンジン音-その２
+            </button>
+            </Link>
+            <Link href="/engine">
+            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+              エンジン音-その３
+            </button>
+            </Link>
+          </div>
+
+        </div>
+
+        <div>
+          <Link href="/">
+              <Button className="bg-blue-300 text-black cursor-pointer hover:bg-blue-400 rounded-full">
+                  ←　戻る
+              </Button>
+          </Link>
+        </div>
       </div>
+
+
+
+
     )
   }
   
