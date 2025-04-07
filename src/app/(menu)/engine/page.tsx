@@ -1,10 +1,32 @@
+'use client'
+
+import { useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
-
 export default function enginepage() {
+    const audio1Ref = useRef<HTMLAudioElement | null>(null);
+    const audio2Ref = useRef<HTMLAudioElement | null>(null);
+    const audio3Ref = useRef<HTMLAudioElement | null>(null);
+
+    const playAudio = (ref: React.RefObject<HTMLAudioElement | null>) => {
+      if (ref.current) {
+        ref.current.currentTime = 0;
+        ref.current.play();
+      }
+    };
+
+    const stopAudio = (ref: React.RefObject<HTMLAudioElement | null>) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    };
+
+
+
     return (
       <div className="flex flex-col items-center py-10 px-4">
 
@@ -31,22 +53,52 @@ export default function enginepage() {
     
           <h2 className="text-xl font-bold mb-8">車の音に慣れよう</h2>
           
+          <audio ref={audio1Ref} src="/sound/engin1.mp3" preload="auto" />
+          <audio ref={audio2Ref} src="/sound/engin1.mp3" preload="auto" />
+          <audio ref={audio3Ref} src="/sound/engin1.mp3" preload="auto" />
+      
+
+
           <div className="flex flex-col items-center gap-5">
-            <Link href="/music">
-            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              エンジン音-その１
-            </button>
-            </Link>
-            <Link href="/engine">
-            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              エンジン音-その２
-            </button>
-            </Link>
-            <Link href="/engine">
-            <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              エンジン音-その３
-            </button>
-            </Link>
+            <div className="flex gap-8">
+              <button 
+                onClick={() => playAudio(audio1Ref)}
+                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                エンジン音-その１
+              </button>
+              <button 
+                onClick={() => stopAudio(audio1Ref)}
+                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                  停止
+                </button>
+            </div>  
+
+            <div className="flex gap-8">
+              <button 
+                onClick={() => playAudio(audio2Ref)}
+                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                エンジン音-その２
+              </button>
+              <button 
+                onClick={() => stopAudio(audio2Ref)}
+                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                  停止
+              </button>
+            </div>
+
+            <div className="flex gap-8">
+              <button 
+                onClick={() => playAudio(audio3Ref)}
+                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                エンジン音-その３
+              </button>
+              <button 
+                  onClick={() => stopAudio(audio3Ref)}
+                  className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                    停止
+              </button>
+            </div>
+
           </div>
 
         </div>
