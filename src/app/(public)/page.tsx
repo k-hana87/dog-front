@@ -131,7 +131,7 @@ export default function Postspage() {
           <h2 className="text-xl font-bold mb-2">Step 1</h2>
           <p>ワンちゃんのリラックス♫</p>
 
-          <Link href="/music">
+          <Link href="/music2">
           <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
             ▶音楽を選ぶ
           </button>

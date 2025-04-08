@@ -54,8 +54,8 @@ export default function enginepage() {
           <h2 className="text-xl font-bold mb-8">車の音に慣れよう</h2>
           
           <audio ref={audio1Ref} src="/sound/engin1.mp3" preload="auto" />
-          <audio ref={audio2Ref} src="/sound/engin1.mp3" preload="auto" />
-          <audio ref={audio3Ref} src="/sound/engin1.mp3" preload="auto" />
+          <audio ref={audio2Ref} src="/sound/come.mp3" preload="auto" />
+          <audio ref={audio3Ref} src="/sound/happy.mp3" preload="auto" />
       
 
 
