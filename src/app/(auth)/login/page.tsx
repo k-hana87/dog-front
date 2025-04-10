@@ -1,35 +1,38 @@
 "use client";
 
-import { useState, useRef, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
   const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | null>(null);
   const [filterNode, setFilterNode] = useState<BiquadFilterNode | null>(null);
-  const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
   const [currentGain, setCurrentGain] = useState<number>(0);
   const [fileName, setFileName] = useState<string>('');
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  
 
   useEffect(() => {
-    if (!audioContext) {
+    const initAudio = async () => {
       const context = new (window.AudioContext || window.webkitAudioContext)({
         sampleRate: 192000,
       });
       setAudioContext(context);
-    }
-  }, [audioContext]);
 
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && audioContext) {
-      setFileName(file.name);
-      const arrayBuffer = await file.arrayBuffer();
-      const decodedData = await audioContext.decodeAudioData(arrayBuffer);
-      setAudioBuffer(decodedData);
-    }
-  };
+      try {
+        const res = await fetch("http://localhost:8000/music");
+        const arrayBuffer = await res.arrayBuffer();
+        const decoded = await context.decodeAudioData(arrayBuffer);
+        setAudioBuffer(decoded);
+        setFileName("music from API");
+      } catch (err) {
+        console.error("音声の取得に失敗しました", err);
+      }
+    };
+
+    initAudio();
+  }, []);
+
+
 
   const startAudio = async () => {
     if (audioBuffer && audioContext) {
@@ -52,7 +55,7 @@ export default function Home() {
       filter.gain.value = currentGain;
       filter.Q.value = 100;
 
-      // 周波数スペクトル表示用 AnalyserNode
+      // // 周波数スペクトル表示用 AnalyserNode
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 2048 ;
 
@@ -64,9 +67,7 @@ export default function Home() {
       source.start();
       setSourceNode(source);
       setFilterNode(filter);
-      setAnalyserNode(analyser);
-
-      startSpectrumVisualization(analyser);
+      
     }
   };
 
@@ -77,33 +78,7 @@ export default function Home() {
     }
   };
 
-  // requestAnimationFrame を使って周波数スペクトルを連続描画する関数
-  const startSpectrumVisualization = (analyser: AnalyserNode) => {
-    const updateFrequencySpectrum = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-      analyser.getByteFrequencyData(dataArray);
-
-      // canvas をクリア
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // 各ビンをバーとして描画
-      const barWidth = canvas.width / bufferLength *4;
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = (dataArray[i] / 255) * canvas.height ;
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
-      }
-      requestAnimationFrame(updateFrequencySpectrum);
-    };
-
-    requestAnimationFrame(updateFrequencySpectrum);
-  };
+ 
 
   const handleWanButtonClick = (amplificationPercentage: number) => {
     if (filterNode && audioContext) {
@@ -122,9 +97,8 @@ export default function Home() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>ローカルMP3音源の再生・周波数スペクトル表示・イコライジング</h1>
+      <h1>FastAPIから音声を取得　→　再生・周波数スペクトル表示・イコライジング</h1>
       <div>
-        <input type="file" accept=".mp3" onChange={handleFileChange} />
         {fileName && <p>選択したファイル: {fileName}</p>}
       </div>
       <div style={{ margin: '20px 0' }}>
@@ -137,10 +111,7 @@ export default function Home() {
         <button onClick={() => handleWanButtonClick(80000)}>【ワンちゃんボタン3】</button>
         <button onClick={handleWanOff}>【ワンちゃんOFF】</button>
       </div>
-      <div style={{ margin: '20px 0' }}>
-        <h2>周波数スペクトル</h2>
-        <canvas ref={canvasRef} width={500} height={100} style={{ border: '1px solid black' }} />
-      </div>
+     
     </div>
   );
 }
