@@ -58,17 +58,17 @@ export default function mucispage() {
           <div className="flex flex-col items-center gap-5">
             <Link href="/music">
             <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              ？？？
+              音楽　Ａ
             </button>
             </Link>
             <Link href="/engine">
             <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              ？？？
+              音楽　Ｂ
             </button>
             </Link>
             <Link href="/engine">
             <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              ？？？
+              音楽　Ｃ
             </button>
             </Link>
           </div>
