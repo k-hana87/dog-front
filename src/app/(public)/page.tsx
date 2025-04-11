@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef } from "react";
 
 export default function Postspage() {
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -10,7 +11,11 @@ export default function Postspage() {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [timerActive, setTimerActive] = useState(false);
   const [timerFinished, setTimerFinished] = useState(false);
-
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const searchParams = useSearchParams();
+  const musicId = searchParams.get('musicId');  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +73,46 @@ export default function Postspage() {
   };
 
 
+
+
+  useEffect(() => {
+    const context = new AudioContext();
+    setAudioContext(context);
+  }, []);
+
+  
+  useEffect(() => {
+    const fetchAudio = async () => {
+      if (!musicId || !audioContext) return;
+      const res = await fetch(`http://localhost:8000/music/${musicId}`);
+      const arrayBuffer = await res.arrayBuffer();
+      const decoded = await audioContext.decodeAudioData(arrayBuffer);
+      setAudioBuffer(decoded);
+    };
+    fetchAudio();
+  }, [musicId, audioContext]);
+
+
+  const startAudio = () => {
+    if (audioBuffer && audioContext) {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+      sourceRef.current = source;
+    }
+  };
+
+  const stopAudio = () => {
+    if (sourceRef.current) {
+      sourceRef.current.stop();
+      sourceRef.current = null;
+    }
+  };
+
+
+
+  
 
 
   
@@ -154,18 +199,7 @@ export default function Postspage() {
             <h2 className="text-xl font-bold mb-2">pre-Step 3</h2>
             <p>カウントダウン</p>
 
-            <button
-              onClick={handleStartTimer}
-              className={`font-bold px-6 py-3 rounded-full text-lg cursor-pointer ${
-                timerFinished ? "animate-blink bg-red-300" : "bg-green-300"}`}>
-              {timerFinished ? "リラックスできたかな" : "▶タイマースタート"}
-            </button>
-
-          {timerActive && timeLeft !== null && (
-            <div className="text-3xl font-bold text-blue-700">
-              残り: {formatTime(timeLeft)}
-            </div>
-          )}
+            {/* トレーニングなし！！   )} */}
         </div>
 
 
@@ -173,25 +207,17 @@ export default function Postspage() {
             <h2 className="text-xl font-bold mb-2">pre-Step 4</h2>
             <p>ワンちゃんの反応は？</p>
 
-            {/*
-            <div className="flex flex-col gap-4">
-              <Link href="/music">
-              <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                ▶音楽を選ぶ
-              </button>
-              </Link>
-              <Link href="/engine">
-              <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                ▶エンジン音
-              </button>
-              </Link>
-            </div>
-
-            */}
+            {/*  写真orイラストを埋め込む？？       */}
         </div>
 
 
-
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
+{/* //ここから本番モード！！/// */}
 
 
 
@@ -201,46 +227,66 @@ export default function Postspage() {
 
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 1</h2>
-          <p>お出かけまで、あと何分？</p>
+          <p>ワンちゃんのリラックス♫</p>
+          
+          <div id="card3">
+            <div className="flex flex-col gap-4">
+              <Link href="/music2">
+              <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                ▶音楽を選ぶ
+              </button>
+              </Link>
 
-          {/* <Link href="/music"> */}
-          <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            ５～３０分
-          </button>
-          { /* </Link> */}
+{/* ////再生ボタン//// */}
+
+              <button 
+                onClick={startAudio}
+                className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                ▶再生
+              </button>
+{/* ////タイマーが機能しないので、停止処理//// */}              
+              <button onClick={stopAudio}>停止</button>
+            </div>
+          </div>    
         </div>  
 
 
 
+
+{/* ////偽物タイマー。５～２０までの数字を返して、表示させているだけ//// */} 
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 2</h2>
-          <p>ワンちゃんのリラックス♫</p>
+          <p>お出かけまで、あと何分？</p>
+          <div className="text-4xl text-center font-bold mb-4">
+              {display ? `${display} 分` : "　"}  {/* 空白 or 表示 */}
+            </div>
 
-          <Link href="/music2">
-          <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            ▶音楽を選ぶ
-          </button>
-          </Link>
-        </div>  
+            <div className="flex flex-col gap-4">
+              <button 
+                onClick={handleClick}
+                className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                 セット
+              </button>             
+            </div>
+        </div>    
 
-
-        
 
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 3</h2>
           <p>カウントダウン</p>
+          <button
+              onClick={handleStartTimer}
+              className={`font-bold px-6 py-3 rounded-full text-lg cursor-pointer ${
+                timerFinished ? "animate-blink bg-green-400" : "bg-green-300"}`}>
+              {timerFinished ? "さぁ！お出かけ ♪" : "▶タイマースタート"}
+            </button>
 
-          {/*
-          <Link href="/music">
-          <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            ▶音楽を選ぶ
-          </button>
-          </Link> */}
-        </div> 
-
-
-
-
+          {timerActive && timeLeft !== null && (
+            <div className="text-3xl font-bold text-blue-700">
+              残り: {formatTime(timeLeft)}
+            </div>
+          )}
+        </div>
 
       </div>
     </div>

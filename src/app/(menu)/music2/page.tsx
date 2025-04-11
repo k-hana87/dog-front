@@ -1,10 +1,20 @@
+"use client";
+
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+export default function music2page() {
+  const router = useRouter();
+
+  const setMusicId = (id: string) => {
+    router.push(`/?musicId=${id}`);
+  };
 
 
 
-export default function mucispage() {
+
     return (
       <div className="flex flex-col items-center py-10 px-4">
 
@@ -23,57 +33,61 @@ export default function mucispage() {
 
         <div className="w-full max-w-sm mb-2">
           <div className="bg-gray-200 p-6 rounded-full mb-2">
+            <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-bold mb-2">音楽を選ぶ</h2>
+                <div>
+                  <Link href="/">
+                      <Button className="bg-blue-100 text-black cursor-pointer hover:bg-blue-200 rounded-full">
+                          ←　ホームに戻る
+                      </Button>
+                  </Link>
+                </div>
+            </div>
+          </div>
+        </div>
+        
+
+
+        <div className="w-full max-w-sm bg-green-100 p-6 rounded-xl mb-8">          
+          <h2 className="text-xl font-bold mb-8">楽曲を指定する</h2>
+
+          <div className="flex flex-col items-center gap-5">
+            <button 
+              onClick={() => setMusicId("001")}
+              className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+            レゲエ ワンダホーンda！
+            </button>
+            <button 
+              onClick={() => setMusicId("002")}
+              className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+            Peace & Honda
+            </button>
+            <button 
+              onClick={() => setMusicId("003")}
+              className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+            愛犬のための安全なレゲエ集
+            </button> 
           </div>
         </div>
 
-        <div className="w-full max-w-sm bg-green-100 p-6 rounded-xl mb-2">          
-    
+
+
+        <div className="w-full max-w-sm bg-green-100 p-6 rounded-xl mb-2">             
           <h2 className="text-xl font-bold mb-8">ワンちゃんのお好み</h2>
-          
           <div className="flex flex-col items-center gap-5">
-            <Link href="/music">
             <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
               ワンちゃんモード　その１
             </button>
-            </Link>
-            <Link href="/engine">
             <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
               ワンちゃんモード　その２
             </button>
-            </Link>
-            <Link href="/engine">
             <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
               ワンちゃんモード　その３
             </button>
-            </Link>
           </div>
-
         </div>
 
-        <div className="w-full max-w-sm bg-green-100 p-6 rounded-xl mb-8">          
-    
-          <h2 className="text-xl font-bold mb-8">楽曲を指定する</h2>
-          
-          <div className="flex flex-col items-center gap-5">
-            <Link href="/music">
-            <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              履歴
-            </button>
-            </Link>
-            <Link href="/engine">
-            <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              履歴
-            </button>
-            </Link>
-            <Link href="/engine">
-            <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              履歴
-            </button>
-            </Link>
-          </div>
-
-        </div>
+        
 
 
 
