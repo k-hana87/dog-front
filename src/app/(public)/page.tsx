@@ -21,7 +21,7 @@ export default function Postspage() {
 
   useEffect(() => {
     // ✅ バックエンドを使わず固定のタイマー候補を使用
-    setNumbers([5, 10, 15]);
+    setNumbers([5, 10, 15, 20]);
   }, []);
 
   const display = index === numbers.length ? "" : numbers[index];
