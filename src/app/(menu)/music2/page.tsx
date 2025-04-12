@@ -9,7 +9,7 @@ export default function music2page() {
   const router = useRouter();
 
   const setMusicId = (id: string) => {
-    router.push(`/?musicId=${id}`);
+    router.push(`/?musicId=${id}#card3`);
   };
 
 
@@ -55,17 +55,17 @@ export default function music2page() {
             <button 
               onClick={() => setMusicId("001")}
               className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            レゲエ ワンダホーンda！
+              ワンダホー How we move dog
             </button>
             <button 
               onClick={() => setMusicId("002")}
               className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            Peace & Honda
+              Peace & Honda
             </button>
             <button 
               onClick={() => setMusicId("003")}
               className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            愛犬のための安全なレゲエ集
+              The Power of Reggae
             </button> 
           </div>
         </div>

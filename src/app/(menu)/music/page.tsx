@@ -209,7 +209,7 @@ export default function mucispage() {
             <button 
               onClick={() => setMusicId("001")}
               className="bg-blue-300 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              １　レゲエ ワンダホーンda！
+              １　ワンダホー How we move dog
             </button>
            
             <button 
@@ -221,7 +221,7 @@ export default function mucispage() {
             <button 
               onClick={() => setMusicId("003")}
               className="bg-blue-300 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-              ３　愛犬のための安全なレゲエ集
+              ３　The Power of Reggae
             </button>
            
           </div>

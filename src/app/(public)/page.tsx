@@ -31,6 +31,8 @@ export default function Postspage() {
     fetchData();
   }, []);
 
+
+
   const handleClick = () => {
     const nextIndex = (index + 1) % (numbers.length + 1); // 最後は空欄
     setIndex(nextIndex);
@@ -153,30 +155,11 @@ export default function Postspage() {
       <div className="flex flex-col items-center">
         <div id="card1" className="w-full max-w-sm bg-gray-200 shadow-md p-6 rounded-full mb-8">
             <h2 className="text-xl font-bold mb-2">トレーニング（練習）モード</h2>
-        </div>
+        </div>         
 
-
-          
 
         <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-8">
             <h2 className="text-xl font-bold mb-2">pre-Step 1</h2>
-            <p>タイマーセット</p>
-
-            <div className="text-4xl text-center font-bold mb-4">
-              {display ? `${display} 分` : "　"}  {/* 空白 or 表示 */}
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <button 
-                onClick={handleClick}
-                className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                 セット
-              </button>             
-            </div>
-        </div>
-
-        <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-8">
-            <h2 className="text-xl font-bold mb-2">pre-Step 2</h2>
             <p>ワンちゃんの準備、スタート！</p>
 
             <div className="flex flex-col gap-4">
@@ -193,22 +176,13 @@ export default function Postspage() {
             </div>
         </div>
 
-
-
-        <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-8">
-            <h2 className="text-xl font-bold mb-2">pre-Step 3</h2>
-            <p>カウントダウン</p>
-
-            {/* トレーニングなし！！   )} */}
-        </div>
-
-
         <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-30">
-            <h2 className="text-xl font-bold mb-2">pre-Step 4</h2>
+            <h2 className="text-xl font-bold mb-2">pre-Step 2</h2>
             <p>ワンちゃんの反応は？</p>
 
             {/*  写真orイラストを埋め込む？？       */}
         </div>
+
 
 
 {/* //ここから本番モード！！/// */}
@@ -237,8 +211,11 @@ export default function Postspage() {
               </button>
               </Link>
 
-{/* ////再生ボタン//// */}
 
+
+{/* ///STEP1のコーナー、上↑が音楽を選んでデータをもってくる部分 */}
+{/* 下↓　再生ボタン　と　停止ボタンです */}
+{/* ////再生ボタン//// */}
               <button 
                 onClick={startAudio}
                 className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
@@ -252,7 +229,7 @@ export default function Postspage() {
 
 
 
-
+{/* STEP2のコーナー、タイマーセット　　お出かけまで、あと何分？ */}
 {/* ////偽物タイマー。５～２０までの数字を返して、表示させているだけ//// */} 
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 2</h2>
@@ -271,6 +248,10 @@ export default function Postspage() {
         </div>    
 
 
+
+{/* STEP3のコーナー、カウントダウン　タイマースタート */}
+{/* “開始時の▶タイマースタートと、終了時のさぁ！お出かけ”はお遊びなので、無くても大丈夫です */}
+
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 3</h2>
           <p>カウントダウン</p>
@@ -287,6 +268,8 @@ export default function Postspage() {
             </div>
           )}
         </div>
+
+
 
       </div>
     </div>

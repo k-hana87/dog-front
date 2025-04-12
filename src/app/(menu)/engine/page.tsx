@@ -60,8 +60,8 @@ export default function enginepage() {
           <h2 className="text-xl font-bold mb-8">車の音に慣れよう</h2>
           
           <audio ref={audio1Ref} src="/sound/engin1.mp3" preload="auto" />
-          <audio ref={audio2Ref} src="/sound/reggae1.mp3" preload="auto" />
-          <audio ref={audio3Ref} src="/sound/reggae2.mp3" preload="auto" />
+          <audio ref={audio2Ref} src="/sound/engin-v.mp3" preload="auto" />
+          <audio ref={audio3Ref} src="/sound/engin-f.mp3" preload="auto" />
           <audio ref={audio4Ref} src="/sound/8000hz.mp3" preload="auto" />
       
 
@@ -71,7 +71,7 @@ export default function enginepage() {
               <button 
                 onClick={() => playMultipleAudios(audio1Ref, audio4Ref)}
                 className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                エンジン音-その１
+                ホンダ-CIVIC
               </button>
               <button 
                 onClick={() => stopMultipleAudios(audio1Ref, audio4Ref)}
@@ -84,7 +84,7 @@ export default function enginepage() {
               <button 
                 onClick={() => playMultipleAudios(audio2Ref, audio4Ref)}
                 className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                エンジン音-その２
+                ホンダ-VEZEL
               </button>
               <button 
                 onClick={() => stopMultipleAudios(audio2Ref, audio4Ref)}
@@ -97,7 +97,7 @@ export default function enginepage() {
               <button 
                 onClick={() => playMultipleAudios(audio3Ref, audio4Ref)}
                 className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                エンジン音-その３
+                ホンダ-FREED
               </button>
               <button 
                   onClick={() => stopMultipleAudios(audio3Ref, audio4Ref)}
