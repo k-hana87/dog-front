@@ -5,84 +5,96 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from "react";
 
+
 export default function Postspage() {
-  const [numbers, setNumbers] = useState<number[]>([]);
-  const [index, setIndex] = useState<number>(-1); // 最初は空欄状態
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const [timerActive, setTimerActive] = useState(false);
-  const [timerFinished, setTimerFinished] = useState(false);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
-  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
-  const searchParams = useSearchParams();
-  const musicId = searchParams.get('musicId');  
+//アバター切り替え//
+  const [avatarIndex, setAvatarIndex] = useState(0);
+  const avatars = [
+    { src: "/images/dog1.jpg", fallback: "relax" },
+    { src: "/images/dog2.jpg", fallback: "attract" },
+    { src: "/images/dog3.jpg", fallback: "bored" },
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/numbers");
-        const data = await res.json();
-        setNumbers(data);
-      } catch (error) {
-        console.error("fetch error:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
-
-  const handleClick = () => {
-    const nextIndex = (index + 1) % (numbers.length + 1); // 最後は空欄
-    setIndex(nextIndex);
+  const handleAvatarClick = () => {
+    setAvatarIndex((prev) => (prev + 1) % avatars.length);
   };
 
-  const display = index === numbers.length ? "" : numbers[index];
+  const currentAvatar = avatars[avatarIndex];
 
-  // タイマーを開始する
+
+////////ワラビーさんタイマー！！！//////////////
+////////ワラビーさんタイマー！！！４番から//////////////
+  // 1. タイマー状態管理
+  // ==============================
+  const [numbers, setNumbers] = useState<number[]>([]);       // タイマー候補リスト
+  const [index, setIndex] = useState<number>(-1);             // 選択中のインデックス（候補がない状態：-1）
+  const [timeLeft, setTimeLeft] = useState<number | null>(null); // 残り時間（秒）
+  const [timerActive, setTimerActive] = useState(false);      // タイマーが動いているか
+  const [timerFinished, setTimerFinished] = useState(false);  // タイマーが終了したか
+  const [paused, setPaused] = useState(false);                // ⏸ 一時停止中かどうか
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);       // タイマー制御用の参照
+
+  // 2. オーディオ再生用の状態管理
+  // ==============================
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null); // 音声再生ノード参照
+
+  // 3. URLパラメータ取得
+  // ==============================
+  const searchParams = useSearchParams();
+  const musicId = searchParams.get("musicId");
+
+  // 4. タイマー候補（ハードコーディング）
+  // ==============================
+  useEffect(() => {
+    // ✅ バックエンドを使わず固定のタイマー候補を使用
+    setNumbers([5, 10, 15, 20]);
+  }, []);
+
+  const display = index === numbers.length ? "" : numbers[index]; // タイマー開始関数、表示する数字 or 空
+
   const handleStartTimer = () => {
     if (display) {
       const seconds = display * 60;
       setTimeLeft(seconds);
       setTimerActive(true);
       setTimerFinished(false);
+      setPaused(false);// タイマースタート時は一時停止状態を解除
+      startAudio(); // タイマースタートと同時に音楽再生開始
     }
   };
 
-  // タイマーのカウントダウン処理
   useEffect(() => {
-    if (!timerActive || timeLeft === null) return;
-
+    if (!timerActive || timeLeft === null || paused) return;
     if (timeLeft === 0) {
       setTimerActive(false);
       setTimerFinished(true);
+      stopAudio(); // タイマー終了時に音楽停止
       return;
     }
 
-    const timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       setTimeLeft((prev) => (prev ?? 0) - 1);
     }, 1000);
 
-    return () => clearTimeout(timer);
-  }, [timeLeft, timerActive]);
+    return () => clearTimeout(timerRef.current!);
+  }, [timeLeft, timerActive, paused]);
 
-  // 分:秒 にフォーマット
+  
   const formatTime = (sec: number) => {
-    const m = Math.floor(sec / 60).toString().padStart(2, "0");
+    const m = Math.floor(sec / 60).toString().padStart(2, "0");  //６０秒を分：秒に
     const s = (sec % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
 
-
-
-
   useEffect(() => {
-    const context = new AudioContext();
+    const context = new AudioContext();  //AudioContextの初期化
     setAudioContext(context);
   }, []);
 
-  
+/////音声ファイルの取得とデコード
   useEffect(() => {
     const fetchAudio = async () => {
       if (!musicId || !audioContext) return;
@@ -94,7 +106,7 @@ export default function Postspage() {
     fetchAudio();
   }, [musicId, audioContext]);
 
-
+///// 音楽再生関数
   const startAudio = () => {
     if (audioBuffer && audioContext) {
       const source = audioContext.createBufferSource();
@@ -105,6 +117,7 @@ export default function Postspage() {
     }
   };
 
+///// 音楽停止  
   const stopAudio = () => {
     if (sourceRef.current) {
       sourceRef.current.stop();
@@ -112,9 +125,19 @@ export default function Postspage() {
     }
   };
 
+  const handlePause = () => {
+    setPaused(true);  // タイマーを一時停止
+    stopAudio();  //音楽を一時停止（停止）
+    if (timerRef.current) clearTimeout(timerRef.current);
+  };
+
+  const handleResume = () => {
+    setPaused(false);  // タイマーを再開
+    startAudio();  // 音楽を再開（再生）
+  };
 
 
-  
+
 
 
   
@@ -179,19 +202,14 @@ export default function Postspage() {
         <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-30">
             <h2 className="text-xl font-bold mb-2">pre-Step 2</h2>
             <p>ワンちゃんの反応は？</p>
-
-            {/*  写真orイラストを埋め込む？？       */}
+            <Avatar 
+              onClick={handleAvatarClick}
+              className="flex flex-col w-25 h-25 mx-auto mt-4 cursor-pointer">
+              <AvatarImage src={currentAvatar.src}/>
+              <AvatarFallback>{currentAvatar.fallback}</AvatarFallback>
+            </Avatar>
         </div>
 
-
-
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
-{/* //ここから本番モード！！/// */}
 
 
 
@@ -199,10 +217,10 @@ export default function Postspage() {
             <h2 className="text-xl font-bold mb-2">お出かけ（本番）モード</h2>
         </div>
 
+        {/* Step 1: 音楽選択・再生 */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 1</h2>
-          <p>ワンちゃんのリラックス♫</p>
-          
+          <p>ワンちゃんのリラックス♫</p>         
           <div id="card3">
             <div className="flex flex-col gap-4">
               <Link href="/music2">
@@ -210,68 +228,68 @@ export default function Postspage() {
                 ▶音楽を選ぶ
               </button>
               </Link>
-
-
-
-{/* ///STEP1のコーナー、上↑が音楽を選んでデータをもってくる部分 */}
-{/* 下↓　再生ボタン　と　停止ボタンです */}
-{/* ////再生ボタン//// */}
-              <button 
-                onClick={startAudio}
-                className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                ▶再生
-              </button>
-{/* ////タイマーが機能しないので、停止処理//// */}              
-              <button onClick={stopAudio}>停止</button>
             </div>
-          </div>    
-        </div>  
+          </div>
+        </div>
 
-
-
-{/* STEP2のコーナー、タイマーセット　　お出かけまで、あと何分？ */}
-{/* ////偽物タイマー。５～２０までの数字を返して、表示させているだけ//// */} 
+        {/* Step 2: 時間選択ボタンに修正済み */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 2</h2>
           <p>お出かけまで、あと何分？</p>
-          <div className="text-4xl text-center font-bold mb-4">
-              {display ? `${display} 分` : "　"}  {/* 空白 or 表示 */}
-            </div>
+          <div className="text-4xl text-center font-bold mb-4 text-green-700">
+            {display ? `${display} 分` : "時間未選択"}
+          </div>
+          <div className="flex justify-center gap-4">
+            {[5, 10, 15].map((min) => (
+              <button
+                key={min}
+                onClick={() => setIndex(numbers.indexOf(min))}
+                className="bg-green-200 font-bold px-4 py-2 rounded-full text-lg cursor-pointer"
+              >
+                {min}分
+              </button>
+            ))}
+          </div>
+        </div>
 
-            <div className="flex flex-col gap-4">
-              <button 
-                onClick={handleClick}
-                className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                 セット
-              </button>             
-            </div>
-        </div>    
-
-
-
-{/* STEP3のコーナー、カウントダウン　タイマースタート */}
-{/* “開始時の▶タイマースタートと、終了時のさぁ！お出かけ”はお遊びなので、無くても大丈夫です */}
-
+        {/* Step 3: 一時停止と再開を切り替え表示 */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 3</h2>
           <p>カウントダウン</p>
           <button
-              onClick={handleStartTimer}
-              className={`font-bold px-6 py-3 rounded-full text-lg cursor-pointer ${
-                timerFinished ? "animate-blink bg-green-400" : "bg-green-300"}`}>
-              {timerFinished ? "さぁ！お出かけ ♪" : "▶タイマースタート"}
-            </button>
+            onClick={handleStartTimer}
+            disabled={!display}
+            className={`font-bold px-6 py-3 rounded-full text-lg cursor-pointer ${
+              timerFinished ? "animate-blink bg-green-400" : "bg-green-300"
+            }`}
+          >
+            {timerFinished ? "さぁ！お出かけ ♪" : "▶タイマースタート"}
+          </button>
 
-          {timerActive && timeLeft !== null && (
-            <div className="text-3xl font-bold text-blue-700">
-              残り: {formatTime(timeLeft)}
+          {timerActive && (
+            <div className="mt-4 flex flex-col items-center gap-3">
+              <div className="text-3xl font-bold text-blue-700">
+                残り: {formatTime(timeLeft ?? 0)}
+              </div>
+              {paused ? (
+                <button
+                  onClick={handleResume}
+                  className="bg-yellow-300 font-bold px-4 py-2 rounded-full text-lg"
+                >
+                  ▶再開
+                </button>
+              ) : (
+                <button
+                  onClick={handlePause}
+                  className="bg-red-300 font-bold px-4 py-2 rounded-full text-lg"
+                >
+                  ⏸一時停止
+                </button>
+              )}
             </div>
           )}
         </div>
-
-
-
       </div>
     </div>
-  )
+  );
 }

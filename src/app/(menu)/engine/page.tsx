@@ -111,7 +111,7 @@ export default function enginepage() {
         </div>
 
         <div>
-          <Link href="/">
+          <Link href="/#card1">
               <Button className="bg-blue-300 text-black cursor-pointer hover:bg-blue-400 rounded-full">
                   ←　戻る
               </Button>
