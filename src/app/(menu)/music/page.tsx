@@ -3,18 +3,16 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, } from 'react';
 
 
-export default function mucispage() {
+export default function Mucispage() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
   const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | null>(null);
   const [filterNode, setFilterNode] = useState<BiquadFilterNode | null>(null);
   const [currentGain, setCurrentGain] = useState<number>(0);
-  const [fileName, setFileName] = useState<string>('');
   const [musicId, setMusicId] = useState("");
-  const sourceRef = useRef(null);
 
   useEffect(() => {
     const initAudio = async () => {
@@ -28,12 +26,13 @@ export default function mucispage() {
   }, []);
 
 
+
   // 音楽IDに応じて音声ファイルを取得
   const fetchAudio = async () => {
     if (!musicId || !audioContext) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/music/${musicId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/music/${musicId}`);
       
       // const res = await fetch(`https://app-002-step3-2-py-oshima9.azurewebsites.net/${musicId}`);
       if (!res.ok) throw new Error("音楽が見つかりません");

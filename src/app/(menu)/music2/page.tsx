@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function music2page() {
+export default function Music2page() {
   const router = useRouter();
 
   const setMusicId = (id: string) => {

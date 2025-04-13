@@ -98,7 +98,8 @@ export default function Postspage() {
   useEffect(() => {
     const fetchAudio = async () => {
       if (!musicId || !audioContext) return;
-      const res = await fetch(`http://localhost:8000/music/${musicId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/music/${musicId}`);
+      // const res = await fetch(`http://localhost:8000/music/${musicId}`);
       const arrayBuffer = await res.arrayBuffer();
       const decoded = await audioContext.decodeAudioData(arrayBuffer);
       setAudioBuffer(decoded);

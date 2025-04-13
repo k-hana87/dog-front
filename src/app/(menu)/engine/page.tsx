@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
-export default function enginepage() {
+export default function Enginepage() {
     const audio1Ref = useRef<HTMLAudioElement | null>(null);
     const audio2Ref = useRef<HTMLAudioElement | null>(null);
     const audio3Ref = useRef<HTMLAudioElement | null>(null);
