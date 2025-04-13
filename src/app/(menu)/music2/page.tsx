@@ -36,7 +36,7 @@ export default function music2page() {
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-bold mb-2">音楽を選ぶ</h2>
                 <div>
-                  <Link href="/">
+                  <Link href="/#card2">
                       <Button className="bg-blue-100 text-black cursor-pointer hover:bg-blue-200 rounded-full">
                           ←　ホームに戻る
                       </Button>
@@ -92,7 +92,7 @@ export default function music2page() {
 
 
         <div>
-          <Link href="/">
+          <Link href="/#card2">
               <Button className="bg-green-300 text-black cursor-pointer hover:bg-green-400 rounded-full">
                   ←　戻る
               </Button>

@@ -34,6 +34,8 @@ export default function mucispage() {
 
     try {
       const res = await fetch(`http://localhost:8000/music/${musicId}`);
+      
+      // const res = await fetch(`https://app-002-step3-2-py-oshima9.azurewebsites.net/${musicId}`);
       if (!res.ok) throw new Error("音楽が見つかりません");
 
       const arrayBuffer = await res.arrayBuffer();
@@ -135,7 +137,7 @@ export default function mucispage() {
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-bold mb-2">音楽を選ぶ</h2>
                 <div>
-                  <Link href="/">
+                  <Link href="/#card1">
                       <Button className="bg-blue-100 text-black cursor-pointer hover:bg-blue-200 rounded-full">
                           ←　ホームに戻る
                       </Button>
@@ -203,7 +205,7 @@ export default function mucispage() {
 
         <div className="w-full max-w-sm bg-blue-100 p-6 rounded-xl mb-8">          
     
-          <h2 className="text-xl font-bold mb-3">楽曲を変更する</h2>
+          <h2 className="text-xl font-bold mb-3">ワンちゃんのお気に入り</h2>
           
           <div className="flex flex-col items-center gap-5">
             <button 
@@ -231,7 +233,7 @@ export default function mucispage() {
 
 
         <div>
-          <Link href="/">
+          <Link href="/#card1">
               <Button className="bg-blue-300 text-black cursor-pointer hover:bg-blue-400 rounded-full">
                   ←　戻る
               </Button>
